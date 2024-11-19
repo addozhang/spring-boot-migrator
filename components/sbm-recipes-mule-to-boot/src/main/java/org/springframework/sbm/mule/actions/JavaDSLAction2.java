@@ -23,7 +23,7 @@ import org.openrewrite.ExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.sbm.boot.properties.actions.AddSpringBootApplicationPropertiesAction;
 import org.springframework.sbm.boot.properties.api.SpringBootApplicationProperties;
-import org.springframework.sbm.boot.properties.search.SpringBootApplicationPropertiesResourceListFilter;
+import org.springframework.sbm.boot.properties.search.SpringBootApplicationPropertiesResourceListFinder;
 import org.springframework.sbm.build.api.BuildFile;
 import org.springframework.sbm.build.api.Dependency;
 import org.springframework.sbm.build.api.JavaSourceSet;
@@ -228,13 +228,13 @@ public class JavaDSLAction2 extends AbstractAction {
 
     @NotNull
     private SpringBootApplicationProperties findOrCreateDefaultApplicationProperties(ProjectContext projectContext) {
-        List<SpringBootApplicationProperties> bootApplicationProperties = projectContext.search(new SpringBootApplicationPropertiesResourceListFilter());
+        List<SpringBootApplicationProperties> bootApplicationProperties = projectContext.search(new SpringBootApplicationPropertiesResourceListFinder());
         if (bootApplicationProperties.isEmpty()) {
             new AddSpringBootApplicationPropertiesAction(executionContext).apply(projectContext);
         }
 
         return projectContext
-                .search(new SpringBootApplicationPropertiesResourceListFilter()).stream()
+                .search(new SpringBootApplicationPropertiesResourceListFinder()).stream()
                 .filter(SpringBootApplicationProperties::isDefaultProperties)
                 .findFirst()
                 .get();

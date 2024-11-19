@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.mulesoft.schema.mule.amqp.OutboundEndpointType;
 import org.mulesoft.schema.mule.core.FlowType;
 import org.mulesoft.schema.mule.core.MuleType;
+import org.springframework.rewrite.parser.RewriteExecutionContext;
 import org.springframework.sbm.engine.context.ProjectContext;
 import org.springframework.sbm.mule.actions.javadsl.translators.Bean;
 import org.springframework.sbm.mule.actions.javadsl.translators.DslSnippet;
@@ -26,7 +27,6 @@ import org.springframework.sbm.mule.api.toplevel.configuration.MuleConfiguration
 import org.springframework.sbm.mule.resource.MuleXml;
 import org.springframework.sbm.mule.resource.MuleXmlProjectResourceFilter;
 import org.springframework.sbm.mule.resource.MuleXmlProjectResourceRegistrar;
-import org.springframework.sbm.parsers.RewriteExecutionContext;
 import org.springframework.sbm.project.resource.TestProjectContext;
 
 import javax.xml.bind.JAXBElement;

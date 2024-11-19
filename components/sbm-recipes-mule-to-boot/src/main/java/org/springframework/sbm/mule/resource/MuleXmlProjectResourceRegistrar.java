@@ -21,8 +21,6 @@ import org.openrewrite.Parser;
 import org.openrewrite.SourceFile;
 import org.openrewrite.xml.XmlParser;
 import org.openrewrite.xml.tree.Xml;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.sbm.parsers.RewriteExecutionContext;
 import org.springframework.sbm.project.resource.ProjectResourceWrapper;
 import org.springframework.rewrite.resource.RewriteSourceFileHolder;
 import org.springframework.stereotype.Component;
@@ -30,6 +28,7 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -47,8 +46,8 @@ public class MuleXmlProjectResourceRegistrar implements ProjectResourceWrapper<M
 
 
         Parser.Input input = new Parser.Input(rewriteSourceFileHolder.getAbsolutePath(), () -> new ByteArrayInputStream(rewriteSourceFileHolder.print().getBytes(StandardCharsets.UTF_8)));
-        List<Xml.Document> documents = new XmlParser().parseInputs(List.of(input), rewriteSourceFileHolder.getAbsoluteProjectDir(), executionContext);
-        return new MuleXml(rewriteSourceFileHolder.getAbsoluteProjectDir(), documents.get(0));
+        Stream<SourceFile> documents = new XmlParser().parseInputs(List.of(input), rewriteSourceFileHolder.getAbsoluteProjectDir(), executionContext);
+        return new MuleXml(rewriteSourceFileHolder.getAbsoluteProjectDir(), (Xml.Document) documents.findFirst().get());
     }
 
     private boolean isMuleXmlResource(RewriteSourceFileHolder<?> sourceFileHolder) {

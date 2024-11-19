@@ -61,6 +61,7 @@
         <module>components/sbm-recipes-jee-to-boot</module>
         <module>components/sbm-recipes-spring-cloud</module>
         <module>components/sbm-recipes-boot-upgrade</module>
+        <module>components/sbm-recipes-mule-to-boot</module>
     </modules>
 
     <repositories>
@@ -117,6 +118,11 @@
             <dependency>
                 <groupId>org.springframework.sbm</groupId>
                 <artifactId>sbm-openrewrite</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.sbm</groupId>
+                <artifactId>recipe-test-support</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

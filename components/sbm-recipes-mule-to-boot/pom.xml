@@ -27,8 +27,8 @@
     <artifactId>sbm-recipes-mule-to-boot</artifactId>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -100,6 +100,11 @@
             <groupId>org.springframework.sbm</groupId>
             <artifactId>recipe-test-support</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.sbm</groupId>
+            <artifactId>test-helper</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

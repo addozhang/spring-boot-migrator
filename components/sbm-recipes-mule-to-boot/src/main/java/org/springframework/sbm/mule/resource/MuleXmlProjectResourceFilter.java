@@ -16,9 +16,9 @@
 package org.springframework.sbm.mule.resource;
 
 
-import org.springframework.sbm.project.resource.filter.GenericTypeListFilter;
+import org.springframework.rewrite.resource.finder.GenericTypeListFinder;
 
-public class MuleXmlProjectResourceFilter extends GenericTypeListFilter<MuleXml> {
+public class MuleXmlProjectResourceFilter extends GenericTypeListFinder<MuleXml> {
     public MuleXmlProjectResourceFilter() {
         super(MuleXml.class);
     }

@@ -17,7 +17,7 @@ package org.springframework.sbm.mule.actions;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.sbm.boot.properties.api.SpringBootApplicationProperties;
-import org.springframework.sbm.boot.properties.search.SpringBootApplicationPropertiesResourceListFilter;
+import org.springframework.sbm.boot.properties.search.SpringBootApplicationPropertiesResourceListFinder;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class MuleToJavaDSLMultipleTest extends JavaDSLActionBaseTest {
         addXMLFileToResource(muleInboundOutboundXml);
         runAction(projectContext -> {
             assertThat(projectContext.getProjectJavaSources().list()).hasSize(1);
-            List<SpringBootApplicationProperties> springBootApplicationProperties = projectContext.search(new SpringBootApplicationPropertiesResourceListFilter());
+            List<SpringBootApplicationProperties> springBootApplicationProperties = projectContext.search(new SpringBootApplicationPropertiesResourceListFinder());
             assertThat(springBootApplicationProperties).hasSize(1);
 
             SpringBootApplicationProperties properties = springBootApplicationProperties.get(0);
