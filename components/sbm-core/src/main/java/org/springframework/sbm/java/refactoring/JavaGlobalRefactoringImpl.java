@@ -119,7 +119,7 @@ public class JavaGlobalRefactoringImpl implements JavaGlobalRefactoring {
                 return markers;
             }
         }).run(List.of(cu), executionContext);
-        J.CompilationUnit compilationUnit = (J.CompilationUnit) recipeRun.getResults().get(0).getAfter();
+        J.CompilationUnit compilationUnit = (J.CompilationUnit) recipeRun.getChangeset().getAllResults().get(0).getAfter();
         compilationUnit = compilationUnit.withMarkers(compilationUnit.getMarkers().removeByType(RecipesThatMadeChanges.class));
         return compilationUnit;
     }

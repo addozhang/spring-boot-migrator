@@ -53,7 +53,7 @@ public class ExcludeDependencyTest {
         Xml.Document maven = MavenParser.builder().build().parse(pomXml).get(0);
         ExcludeDependency excludeDependency = new ExcludeDependency("org.junit.jupiter", "junit-jupiter-api", "test");
         RecipeRun run = excludeDependency.run(List.of(maven));
-        assertThat(run.getResults().get(0).getAfter().printAll()).isEqualTo(
+        assertThat(run.getChangeset().getAllResults().get(0).getAfter().printAll()).isEqualTo(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                         "<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\"\n" +
                         "         xmlns=\"http://maven.apache.org/POM/4.0.0\"\n" +

@@ -20,14 +20,18 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.RecipeRun;
+import org.openrewrite.SourceFile;
+import org.openrewrite.internal.InMemoryLargeSourceSet;
 import org.openrewrite.maven.MavenParser;
 import org.openrewrite.maven.UpgradeDependencyVersion;
 import org.openrewrite.xml.tree.Xml;
 import org.springframework.sbm.helpers.DependencyVersionHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,7 +73,7 @@ public class UpgradeDependencyVersionTest {
             </project>
             """;
 
-    private final List<Xml.Document> mavens = MavenParser.builder().build().parse(POM_XML);
+    private final Stream<SourceFile> mavens = MavenParser.builder().build().parse(POM_XML);
 
     @Test
     void testUpgradeDependency() {
@@ -107,11 +111,11 @@ public class UpgradeDependencyVersionTest {
         String groupId = "org.springframework.boot";
         String artifactId = "spring-boot-starter-test";
         String version = "2.5.3";
-        UpgradeDependencyVersion sut = new UpgradeDependencyVersion(groupId, artifactId, version, null, false);
+        UpgradeDependencyVersion sut = new UpgradeDependencyVersion(groupId, artifactId, version, null, false, new ArrayList<>());
 
-        RecipeRun recipeRun = sut.run(mavens);
+        RecipeRun recipeRun = sut.run(new InMemoryLargeSourceSet(mavens.toList()), new InMemoryExecutionContext());
 
-        assertThat(recipeRun.getResults().get(0).getAfter().printAll()).isEqualTo(expectedPomXml);
+        assertThat(recipeRun.getChangeset().getAllResults().get(0).getAfter().printAll()).isEqualTo(expectedPomXml);
     }
 
     @Test
@@ -152,9 +156,9 @@ public class UpgradeDependencyVersionTest {
         String version = "2.5.3";
         UpgradeDependencyVersion sut = new UpgradeDependencyVersion(groupId, artifactId, version, null, true, List.of());
 
-        RecipeRun recipeRun = sut.run(mavens);
+        RecipeRun recipeRun = sut.run(new InMemoryLargeSourceSet(mavens.toList()), new InMemoryExecutionContext());
 
-        assertThat(recipeRun.getResults().get(0).getAfter().printAll()).isEqualTo(expectedPomXml);
+        assertThat(recipeRun.getChangeset().getAllResults().get(0).getAfter().printAll()).isEqualTo(expectedPomXml);
     }
 
     @Test
@@ -199,9 +203,9 @@ public class UpgradeDependencyVersionTest {
         String version = "latest.release";
         UpgradeDependencyVersion sut = new UpgradeDependencyVersion(groupId, artifactId, version, null, false, List.of());
 
-        RecipeRun results = sut.run(mavens);
+        RecipeRun results = sut.run(new InMemoryLargeSourceSet(mavens.toList()), new InMemoryExecutionContext());
 
-        assertThat(results.getResults().get(0).getAfter().printAll()).isEqualTo(expectedPomXml);
+        assertThat(results.getChangeset().getAllResults().get(0).getAfter().printAll()).isEqualTo(expectedPomXml);
     }
 
     private Optional<String> getLatestBootReleaseVersion(String groupId, String artifactId) {
@@ -216,7 +220,7 @@ public class UpgradeDependencyVersionTest {
         UpgradeDependencyVersion sut = new UpgradeDependencyVersion(groupId, artifactId, version, null, false, List.of());
 
         AtomicBoolean exceptionThrown = new AtomicBoolean(false);
-        RecipeRun results = sut.run(mavens, new InMemoryExecutionContext((e) -> {
+        RecipeRun results = sut.run(new InMemoryLargeSourceSet(mavens.toList()), new InMemoryExecutionContext((e) -> {
             e.printStackTrace();
             exceptionThrown.set(true);
         }));

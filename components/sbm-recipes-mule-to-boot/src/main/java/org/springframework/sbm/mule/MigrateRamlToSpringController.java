@@ -15,36 +15,26 @@
  */
 package org.springframework.sbm.mule;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.sbm.common.migration.conditions.FileMatchingPatternExist;
-import org.springframework.sbm.engine.recipe.Action;
-import org.springframework.sbm.engine.recipe.Recipe;
-import org.springframework.sbm.mule.actions.MigrateRamlToSpringMvc;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Configuration
 public class MigrateRamlToSpringController {
 
-    @Autowired
-    private Recipe jaxRs;
-
-    @Bean
-    Recipe migrateRamlToSpringControllerRecipe() {
-
-        List<Action> actions = Stream.concat(Stream.of(MigrateRamlToSpringMvc.builder().build()), jaxRs.getActions().stream()).collect(Collectors.toList());
-
-        return Recipe.builder()
-                .condition(FileMatchingPatternExist.builder().pattern("/**/*.raml").build())
-                .name("migrate-raml-to-spring-mvc")
-                .description("Create Spring Boot @RestController from .raml files.")
-                .actions(
-                        List.of(MigrateRamlToSpringMvc.builder().build())
-                        /*actions*/)
-                .build();
-    }
+//    @Autowired
+//    private Recipe jaxRs;
+//
+//    @Bean
+//    Recipe migrateRamlToSpringControllerRecipe() {
+//
+//        List<Action> actions = Stream.concat(Stream.of(MigrateRamlToSpringMvc.builder().build()), jaxRs.getActions().stream()).collect(Collectors.toList());
+//
+//        return Recipe.builder()
+//                .condition(FileMatchingPatternExist.builder().pattern("/**/*.raml").build())
+//                .name("migrate-raml-to-spring-mvc")
+//                .description("Create Spring Boot @RestController from .raml files.")
+//                .actions(
+//                        List.of(MigrateRamlToSpringMvc.builder().build())
+//                        /*actions*/)
+//                .build();
+//    }
 }

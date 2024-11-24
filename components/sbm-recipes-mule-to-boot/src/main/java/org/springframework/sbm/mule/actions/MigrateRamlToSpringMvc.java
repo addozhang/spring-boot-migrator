@@ -15,41 +15,14 @@
  */
 package org.springframework.sbm.mule.actions;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.raml.jaxrs.generator.Configuration;
-import org.raml.jaxrs.generator.GenerationException;
-import org.raml.jaxrs.generator.RamlScanner;
-import org.raml.v2.api.RamlModelBuilder;
-import org.raml.v2.api.RamlModelResult;
-import org.raml.v2.api.model.v08.api.Api;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.sbm.build.api.Module;
-import org.springframework.sbm.build.api.JavaSourceSet;
-import org.springframework.sbm.common.api.TextResource.TextSource;
-import org.springframework.sbm.engine.context.ProjectContext;
-import org.springframework.sbm.engine.recipe.AbstractAction;
-import org.springframework.sbm.java.api.JavaSource;
-import org.springframework.sbm.java.util.BasePackageCalculator;
-import org.springframework.sbm.java.util.JavaSourceUtil;
-import org.springframework.sbm.jee.jaxrs.actions.ConvertJaxRsAnnotations;
-import org.springframework.sbm.mule.resources.filter.RamlFileProjectResourceFilter;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
 @Slf4j
-public class MigrateRamlToSpringMvc extends AbstractAction {
+public class MigrateRamlToSpringMvc /*extends AbstractAction*/ {
 
+/*
     @Autowired
     @JsonIgnore
     private BasePackageCalculator basePackageCalculator;
@@ -155,4 +128,5 @@ public class MigrateRamlToSpringMvc extends AbstractAction {
             }
         }
     }
+*/
 }

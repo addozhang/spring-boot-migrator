@@ -17,11 +17,11 @@ package org.springframework.sbm.mule.api.toplevel;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.sbm.java.util.Helper;
 import org.springframework.sbm.mule.actions.javadsl.translators.DslSnippet;
 import org.springframework.sbm.mule.actions.javadsl.translators.MuleComponentToSpringIntegrationDslTranslator;
 import org.springframework.sbm.mule.actions.javadsl.translators.UnknownStatementTranslator;
 import org.springframework.sbm.mule.api.toplevel.configuration.MuleConfigurations;
+import org.springframework.sbm.mule.util.Helper;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;

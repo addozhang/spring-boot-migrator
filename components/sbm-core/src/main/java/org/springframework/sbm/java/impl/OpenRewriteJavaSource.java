@@ -16,6 +16,7 @@
 package org.springframework.sbm.java.impl;
 
 import org.openrewrite.*;
+import org.openrewrite.internal.InMemoryLargeSourceSet;
 import org.openrewrite.java.*;
 import org.openrewrite.java.search.FindAnnotations;
 import org.openrewrite.java.search.FindReferencedTypes;
@@ -146,7 +147,7 @@ public class OpenRewriteJavaSource extends RewriteSourceFileHolder<J.Compilation
             annotation = "@" + annotation;
         }
         FindAnnotations findAnnotation = new FindAnnotations(annotation, true);
-        List<Result> results = findAnnotation.run(List.of(getCompilationUnit())).getResults();
+        List<Result> results = findAnnotation.run(new InMemoryLargeSourceSet(List.of(getCompilationUnit())), new InMemoryExecutionContext()).getChangeset().getAllResults();
         return !results.isEmpty();
     }
 

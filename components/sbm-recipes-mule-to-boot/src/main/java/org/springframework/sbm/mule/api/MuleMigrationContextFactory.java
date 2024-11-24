@@ -15,26 +15,13 @@
  */
 package org.springframework.sbm.mule.api;
 
-import org.springframework.sbm.engine.context.ProjectContext;
-import org.springframework.sbm.mule.api.toplevel.configuration.ConfigurationTypeAdapter;
-import org.springframework.sbm.mule.api.toplevel.configuration.MuleConfigurations;
-import org.springframework.sbm.mule.api.toplevel.configuration.MuleConfigurationsExtractor;
-import org.springframework.sbm.mule.resource.MuleXml;
-import org.springframework.sbm.mule.resource.MuleXmlProjectResourceFilter;
-import org.springframework.sbm.project.resource.filter.GenericTypeListFilter;
-import org.springframework.sbm.properties.api.PropertiesSource;
 import lombok.RequiredArgsConstructor;
-import org.mulesoft.schema.mule.core.*;
 import org.springframework.stereotype.Component;
-
-import javax.xml.bind.JAXBElement;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class MuleMigrationContextFactory {
+/*
 
     private final MuleConfigurationsExtractor muleConfigurationsExtractor;
     public MuleMigrationContext createMuleMigrationContext(ProjectContext projectContext) {
@@ -64,4 +51,5 @@ public class MuleMigrationContextFactory {
     private List<PropertiesSource> findAvailablePropertiesFiles(ProjectContext projectContext) {
         return projectContext.search(new GenericTypeListFilter<>(PropertiesSource.class));
     }
+*/
 }

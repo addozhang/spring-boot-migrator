@@ -17,7 +17,7 @@
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <java.version>17</java.version>
         <spring-shell.version>2.1.14</spring-shell.version>
-        <openrewrite.version>7.35.0</openrewrite.version>
+        <openrewrite.version>8.1.6</openrewrite.version>
         <openrewrite.spring.version>4.32.0</openrewrite.spring.version>
         <rewrite-migrate-java.version>1.17.0</rewrite-migrate-java.version>
         <spring-boot.version>2.7.5</spring-boot.version>
@@ -283,7 +283,7 @@
         <module>components/sbm-recipes-spring-cloud</module>
         <module>components/sbm-recipes-spring-framework</module>
         <module>components/sbm-recipes-jee-to-boot</module>
-        <module>components/sbm-recipes-mule-to-boot</module>
+<!--        <module>components/sbm-recipes-mule-to-boot</module>-->
         <module>components/sbm-support-boot</module>
         <module>components/sbm-support-weblogic</module>
         <module>components/sbm-support-jee</module>

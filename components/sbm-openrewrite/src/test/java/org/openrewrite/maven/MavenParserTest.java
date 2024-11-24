@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.Parser;
+import org.openrewrite.SourceFile;
 import org.openrewrite.maven.cache.InMemoryMavenPomCache;
 import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.ResolvedDependency;
@@ -34,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -140,21 +142,21 @@ public class MavenParserTest {
                 """;
 
         MavenParser mavenParser = MavenParser.builder().build();
-        List<Xml.Document> parsedPomFiles = mavenParser.parse(parentPom, module1Pom, module2Pom);
-        MavenResolutionResult parentPomMarker = parsedPomFiles.get(0).getMarkers().findFirst(MavenResolutionResult.class).get();
+        Stream<SourceFile> parsedPomFiles = mavenParser.parse(parentPom, module1Pom, module2Pom);
+        MavenResolutionResult parentPomMarker = parsedPomFiles.toList().get(0).getMarkers().findFirst(MavenResolutionResult.class).get();
         assertThat(parentPomMarker.getDependencies().get(Scope.Provided)).isEmpty();
         assertThat(parentPomMarker.getDependencies().get(Scope.Runtime)).isEmpty();
         assertThat(parentPomMarker.getDependencies().get(Scope.Compile)).isEmpty();
         assertThat(parentPomMarker.getDependencies().get(Scope.Test)).isEmpty();
 
-        MavenResolutionResult module1PomMarker = parsedPomFiles.get(1).getMarkers().findFirst(MavenResolutionResult.class).get();
+        MavenResolutionResult module1PomMarker = parsedPomFiles.toList().get(1).getMarkers().findFirst(MavenResolutionResult.class).get();
         assertThat(module1PomMarker.getDependencies().get(Scope.Provided)).isEmpty();
         assertThat(module1PomMarker.getDependencies().get(Scope.Runtime)).isEmpty();
         assertThat(module1PomMarker.getDependencies().get(Scope.Compile)).isEmpty();
         assertThat(module1PomMarker.getDependencies().get(Scope.Test)).isNotEmpty();
         assertThat(module1PomMarker.getDependencies().get(Scope.Test).get(0).getGav().toString()).isEqualTo("org.jetbrains:annotations:23.0.0");
 
-        MavenResolutionResult module2PomMarker = parsedPomFiles.get(2).getMarkers().findFirst(MavenResolutionResult.class).get();
+        MavenResolutionResult module2PomMarker = parsedPomFiles.toList().get(2).getMarkers().findFirst(MavenResolutionResult.class).get();
         // expected
 //        assertThat(module2PomMarker.getDependencies().get(Scope.Provided)).hasSize(2);
 //        assertThat(module2PomMarker.getDependencies().get(Scope.Runtime)).hasSize(2);
@@ -209,7 +211,7 @@ public class MavenParserTest {
 
     @Test
     void newParsingShouldRefreshModel() {
-        Xml.Document document = MavenParser.builder().build().parse("""
+        SourceFile document = MavenParser.builder().build().parse("""
                                                                             <?xml version="1.0" encoding="UTF-8"?>
                                                                             <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                                                                     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -219,11 +221,11 @@ public class MavenParserTest {
                                                                                 <packaging>jar</packaging>
                                                                                 <version>0.0.1-SNAPSHOT</version>
                                                                             </project>
-                                                                            """).get(0);
+                                                                            """).toList().get(0);
 
         assertThat(document.getMarkers().findFirst(MavenResolutionResult.class).get().getPom().getDependencyManagement()).isEmpty();
 
-        Xml.Document document1 = MavenParser.builder().build().parse("""
+        SourceFile document1 = MavenParser.builder().build().parse("""
                                                                              <?xml version="1.0" encoding="UTF-8"?>
                                                                              <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                                                                      xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -244,7 +246,7 @@ public class MavenParserTest {
                                                                                      </dependencies>
                                                                                  </dependencyManagement>
                                                                              </project>
-                                                                             """).get(0);
+                                                                             """).toList().get(0);
 
         assertThat(document1.getMarkers().findFirst(MavenResolutionResult.class).get().getPom().getDependencyManagement()).isNotEmpty();
     }
@@ -272,7 +274,7 @@ public class MavenParserTest {
                                      .getBytes(StandardCharsets.UTF_8)),
                              !Files.exists(Path.of("moduleA/pom.xml"))
                 );
-        List<Xml.Document> newMavenFiles = mavenParser.parseInputs(List.of(parserInput), null, new InMemoryExecutionContext((t) -> t.printStackTrace()));
+        Stream<SourceFile> newMavenFiles = mavenParser.parseInputs(List.of(parserInput), null, new InMemoryExecutionContext((t) -> t.printStackTrace()));
 //        System.out.println(newMavenFiles.get(0).printAll());
     }
 
@@ -328,7 +330,7 @@ public class MavenParserTest {
                 </project>
                 """;
         MavenParser mavenParser = MavenParser.builder().build();
-        Xml.Document parentPom = mavenParser.parse(parentPomXml).get(0);
+        SourceFile parentPom = mavenParser.parse(parentPomXml).toList().get(0);
         Optional<MavenResolutionResult> mavenResolutionResult = parentPom.getMarkers().findFirst(MavenResolutionResult.class);
         assertThat(mavenResolutionResult).isPresent();
         assertThatExceptionOfType(UncheckedMavenDownloadingException.class)
@@ -338,7 +340,7 @@ public class MavenParserTest {
 
     @Test
     void parsePomFromTextWithoutMarkers() {
-        Xml.Document sut = MavenParser.builder().build().parse(
+        SourceFile sut = MavenParser.builder().build().parse(
                 new InMemoryExecutionContext((e) -> e.printStackTrace()),
                   """
                   <?xml version="1.0" encoding="UTF-8"?>
@@ -356,7 +358,7 @@ public class MavenParserTest {
                       </modules>
                   </project>
                   """
-        ).get(0);
+        ).toList().get(0);
         assertThat(sut).isNotNull();
     }
 
@@ -372,7 +374,7 @@ public class MavenParserTest {
                 "    <dependencies></dependencies>\n" +
                 "</project>";
 
-        List<Xml.Document> parse = MavenParser.builder().build().parse(pomXml);
+        List<SourceFile> parse = MavenParser.builder().build().parse(pomXml).toList();
         assertThat(parse).isNotEmpty();
     }
 
@@ -409,7 +411,7 @@ public class MavenParserTest {
                         "    </dependencies>\n" +
                         "</project>";
 
-        Xml.Document document = MavenParser.builder().build().parse(pomXml).get(0);
+        SourceFile document = MavenParser.builder().build().parse(pomXml).toList().get(0);
         MavenResolutionResult r = document.getMarkers().findFirst(MavenResolutionResult.class).get();
 
         InMemoryExecutionContext executionContext = new InMemoryExecutionContext((t) -> System.out.println(t.getMessage()));

@@ -15,25 +15,8 @@
  */
 package org.springframework.sbm.mule.resource;
 
-import org.springframework.sbm.project.resource.RewriteSourceFileHolder;
-import lombok.Getter;
-import org.mulesoft.schema.mule.core.MuleType;
-import org.openrewrite.xml.tree.Xml;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.*;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-
-public class MuleXml extends RewriteSourceFileHolder<Xml.Document> {
+public class MuleXml /*extends RewriteSourceFileHolder<Xml.Document>*/ {
+/*
 
     @Getter
     private final Document xmlDocument;
@@ -104,4 +87,5 @@ public class MuleXml extends RewriteSourceFileHolder<Xml.Document> {
             throw new RuntimeException(e);
         }
     }
+*/
 }

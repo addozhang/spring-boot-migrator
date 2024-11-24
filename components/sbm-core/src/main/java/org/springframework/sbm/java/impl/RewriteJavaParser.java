@@ -18,18 +18,20 @@ package org.springframework.sbm.java.impl;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.openrewrite.ExecutionContext;
+import org.openrewrite.SourceFile;
 import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.JavaParser;
-import org.openrewrite.java.marker.JavaSourceSet;
-import org.openrewrite.java.tree.J;
 import org.springframework.sbm.project.resource.SbmApplicationProperties;
 import org.springframework.sbm.scopes.annotations.ScanScope;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Component
 @ScanScope
@@ -59,7 +61,7 @@ public class RewriteJavaParser implements JavaParser {
     }
 
     @Override
-    public List<J.CompilationUnit> parseInputs(Iterable<Input> sources, @Nullable Path relativeTo, ExecutionContext ctx) {
+    public Stream<SourceFile> parseInputs(Iterable<Input> sources, @Nullable Path relativeTo, ExecutionContext ctx) {
         reset();
         return this.javaParser.parseInputs(sources, relativeTo, ctx);
     }
@@ -70,27 +72,58 @@ public class RewriteJavaParser implements JavaParser {
     }
 
     @Override
+    public Charset getCharset(ExecutionContext ctx) {
+        return JavaParser.super.getCharset(ctx);
+    }
+
+    @Override
+    public JavaParser reset(Collection<URI> uris) {
+        return JavaParser.super.reset(uris);
+    }
+
+    @Override
     public void setClasspath(Collection<Path> classpath) {
         this.javaParser.setClasspath(classpath);
     }
 
     @Override
-    public void setSourceSet(String sourceSet) {
-        this.javaParser.setSourceSet(sourceSet);
+    public Path sourcePathFromSourceText(Path prefix, String sourceCode) {
+        return JavaParser.super.sourcePathFromSourceText(prefix, sourceCode);
     }
 
-    @Override
-    public JavaSourceSet getSourceSet(ExecutionContext ctx) {
-        return this.javaParser.getSourceSet(ctx);
-    }
 
-    public List<J.CompilationUnit> parse(List<Path> javaResources, ExecutionContext executionContext) {
+    public Stream<SourceFile> parse(List<Path> javaResources, ExecutionContext executionContext) {
         reset();
         return this.parse(javaResources, null, executionContext);
     }
 
     @Override
-    public List<J.CompilationUnit> parse(String... sources) {
+    public Stream<SourceFile> parse(ExecutionContext ctx, String... sources) {
+        return JavaParser.super.parse(ctx, sources);
+    }
+
+    @Override
+    public Stream<SourceFile> parse(Iterable<Path> sourceFiles, @Nullable Path relativeTo, ExecutionContext ctx) {
+        return JavaParser.super.parse(sourceFiles, relativeTo, ctx);
+    }
+
+    @Override
+    public Stream<SourceFile> parse(String... sources) {
         return this.parse(executionContext, sources);
+    }
+
+    @Override
+    public boolean accept(Path path) {
+        return JavaParser.super.accept(path);
+    }
+
+    @Override
+    public boolean accept(Input input) {
+        return JavaParser.super.accept(input);
+    }
+
+    @Override
+    public Stream<Input> acceptedInputs(Iterable<Input> input) {
+        return JavaParser.super.acceptedInputs(input);
     }
 }

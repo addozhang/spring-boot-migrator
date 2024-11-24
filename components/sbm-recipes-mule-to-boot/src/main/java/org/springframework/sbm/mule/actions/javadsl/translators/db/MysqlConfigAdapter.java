@@ -17,7 +17,6 @@ package org.springframework.sbm.mule.actions.javadsl.translators.db;
 
 import org.mulesoft.schema.mule.db.MySqlDatabaseConfigType;
 import org.mulesoft.schema.mule.db.OracleDatabaseConfigType;
-import org.springframework.sbm.build.api.Dependency;
 import org.springframework.sbm.mule.api.toplevel.configuration.ConfigurationTypeAdapter;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +47,7 @@ public class MysqlConfigAdapter extends ConfigurationTypeAdapter<MySqlDatabaseCo
         return properties;
     }
 
-    @Override
+/*    @Override
     public List<Dependency> getDependencies() {
 
         return List.of(Dependency.builder()
@@ -56,5 +55,5 @@ public class MysqlConfigAdapter extends ConfigurationTypeAdapter<MySqlDatabaseCo
                 .artifactId("mysql-connector-java")
                 .version("8.0.29")
                 .build());
-    }
+    }*/
 }

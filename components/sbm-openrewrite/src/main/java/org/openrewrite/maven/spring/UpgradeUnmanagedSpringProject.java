@@ -31,6 +31,7 @@ import org.openrewrite.maven.tree.*;
 import org.openrewrite.semver.LatestRelease;
 import org.openrewrite.semver.VersionComparator;
 import org.openrewrite.xml.ChangeTagValueVisitor;
+import org.openrewrite.xml.XmlVisitor;
 import org.openrewrite.xml.tree.Xml;
 
 import java.nio.file.Path;
@@ -67,7 +68,6 @@ public class UpgradeUnmanagedSpringProject extends Recipe {
         this.oldVersionPattern = Pattern.compile(versionPattern);
     }
 
-    @Override
     protected TreeVisitor<?, ExecutionContext> getApplicableTest() {
         return new MavenIsoVisitor<>() {
             @Override
@@ -107,6 +107,11 @@ public class UpgradeUnmanagedSpringProject extends Recipe {
         return "Upgrade unmanaged spring project";
     }
 
+    @Override
+    public String getDescription() {
+        return ""; //TODO: Add description
+    }
+
     public synchronized Map<String, String> getDependenciesMap(ExecutionContext ctx) {
         if (springBootDependenciesMap == null) {
             springBootDependenciesMap = buildDependencyMap(ctx);
@@ -114,7 +119,7 @@ public class UpgradeUnmanagedSpringProject extends Recipe {
         return springBootDependenciesMap;
     }
     @Override
-    protected TreeVisitor<?, ExecutionContext> getVisitor() {
+    public TreeVisitor<?, ExecutionContext> getVisitor() {
         return new MavenIsoVisitor<>() {
             @Override
             public Xml.Tag visitTag(Xml.Tag tag, ExecutionContext executionContext) {
@@ -149,7 +154,7 @@ public class UpgradeUnmanagedSpringProject extends Recipe {
                     }
                     if (versionValue.startsWith("${")) {
                         String propertyName = versionValue.substring(2, versionValue.length() - 1);
-                        version.ifPresent(xml -> doAfterVisit(new ChangePropertyValue(propertyName, dependencyVersion, true, true)));
+                        version.ifPresent(xml -> doAfterVisit(new ChangePropertyValue(propertyName, dependencyVersion, true, true).getVisitor()));
                     } else {
                         version.ifPresent(xml -> doAfterVisit(new ChangeTagValueVisitor(xml, dependencyVersion)));
                     }

@@ -15,6 +15,7 @@
  */
 package org.springframework.sbm.support.openrewrite.api;
 
+import org.openrewrite.SourceFile;
 import org.springframework.sbm.java.OpenRewriteTestSupport;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.tree.J;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,7 +39,7 @@ public class AddAnnotationUsingTemplateTest {
         String javaCode =
                 "public class SomeClass {}";
 
-        List<J.CompilationUnit> compilationUnit = JavaParser.fromJavaVersion()
+        Stream<SourceFile> compilationUnit = JavaParser.fromJavaVersion()
                 .build()
                 .parse(javaCode);
 
@@ -45,16 +47,16 @@ public class AddAnnotationUsingTemplateTest {
             @Override
             public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, Object o) {
                 J.ClassDeclaration cd = super.visitClassDeclaration(classDecl, o);
-                JavaTemplate template = JavaTemplate.builder(() -> getCursor().getParent(), "@Disabled")
+                JavaTemplate template = JavaTemplate.builder("@Disabled")
                         .imports("org.junit.jupiter.api.Disabled")
-                        .javaParser(() -> JavaParser.fromJavaVersion().build())
+                        .javaParser(JavaParser.fromJavaVersion())
                         .build();
                 maybeAddImport("org.junit.jupiter.api.Disabled");
-                return cd.withTemplate(template, cd.getCoordinates().addAnnotation((a1, a2) -> 0));
+                return template.apply(getCursor(), cd.getCoordinates().addAnnotation((a1, a2) -> 0));
             }
         };
 
-        @Nullable J classDeclaration = javaIsoVisitor.visit(compilationUnit.get(0), new InMemoryExecutionContext((t) -> t.printStackTrace()));
+        @Nullable J classDeclaration = javaIsoVisitor.visit(compilationUnit.toList().get(0), new InMemoryExecutionContext((t) -> t.printStackTrace()));
 
         assertThat(classDeclaration.print()).isEqualTo(
                 "@Disabled\n" +
@@ -77,23 +79,23 @@ public class AddAnnotationUsingTemplateTest {
 
         JavaParser javaParser = OpenRewriteTestSupport.getJavaParser("org.junit.jupiter:junit-jupiter-api:5.7.1", "javax.ejb:javax.ejb-api:3.2", "org.springframework.boot:spring-boot-starter-data-jpa:2.4.2");
 
-        List<J.CompilationUnit> compilationUnits = javaParser.parse(javaCode);
+        Stream<SourceFile> compilationUnits = javaParser.parse(javaCode);
 
         JavaIsoVisitor<ExecutionContext> javaIsoVisitor = new JavaIsoVisitor<>() {
             @Override
             public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext executionContext) {
                 J.ClassDeclaration cd = super.visitClassDeclaration(classDecl, executionContext);
-                JavaTemplate template = JavaTemplate.builder(() -> getCursor().getParent(), "@Disabled")
+                JavaTemplate template = JavaTemplate.builder("@Disabled")
                         .imports("org.junit.jupiter.api.Disabled")
-                        .javaParser(() -> javaParser)
+                        .javaParser(JavaParser.fromJavaVersion())
                         .build();
-                J.ClassDeclaration j = cd.withTemplate(template, cd.getCoordinates().addAnnotation((a1, a2) -> 0));
+                J.ClassDeclaration j = template.apply(getCursor(), cd.getCoordinates().addAnnotation((a1, a2) -> 0));
                 maybeAddImport("org.junit.jupiter.api.Disabled");
                 return j;
             }
         };
 
-        J.CompilationUnit c = (J.CompilationUnit) javaIsoVisitor.visit(compilationUnits.get(0), new InMemoryExecutionContext((t) -> new RuntimeException(t)));
+        J.CompilationUnit c = (J.CompilationUnit) javaIsoVisitor.visit(compilationUnits.toList().get(0), new InMemoryExecutionContext((t) -> new RuntimeException(t)));
 
         System.out.println(c.printAll());
     }

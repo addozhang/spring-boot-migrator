@@ -15,29 +15,14 @@
  */
 package org.springframework.sbm.mule.actions;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.openrewrite.ExecutionContext;
-import org.springframework.sbm.engine.recipe.AbstractAction;
-import org.springframework.sbm.mule.conditions.MuleConfigFileExist;
-import org.springframework.sbm.mule.resource.MuleXmlProjectResourceFilter;
-import org.springframework.sbm.mule.resource.MuleXml;
-import org.springframework.sbm.engine.context.ProjectContext;
-import org.springframework.sbm.project.resource.StringProjectResource;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import lombok.Builder;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Builder
 @Setter
-public class MigrateMulesoftFile extends AbstractAction {
+public class MigrateMulesoftFile /*extends AbstractAction*/ {
 
+/*
     @Autowired
     @JsonIgnore
     private Configuration configuration;
@@ -72,4 +57,5 @@ public class MigrateMulesoftFile extends AbstractAction {
     public boolean isApplicable(ProjectContext context) {
         return new MuleConfigFileExist().evaluate(context);
     }
+*/
 }

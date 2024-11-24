@@ -16,14 +16,10 @@
 package org.springframework.sbm.mule.api;
 
 import lombok.Getter;
-import org.springframework.sbm.mule.api.toplevel.configuration.MuleConfigurations;
-import org.springframework.sbm.properties.api.PropertiesSource;
-
-import javax.xml.bind.JAXBElement;
-import java.util.List;
 
 @Getter
 public class MuleMigrationContext {
+/*
     private final List<JAXBElement> topLevelElements;
     private final MuleConfigurations muleConfigurations;
     private final List<PropertiesSource> propertiesFiles;
@@ -37,4 +33,5 @@ public class MuleMigrationContext {
         this.muleConfigurations = muleConfigurations;
         this.propertiesFiles = propertiesFiles;
     }
+*/
 }

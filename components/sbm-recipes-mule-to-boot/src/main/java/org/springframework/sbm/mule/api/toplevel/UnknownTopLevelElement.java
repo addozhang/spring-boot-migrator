@@ -17,9 +17,9 @@ package org.springframework.sbm.mule.api.toplevel;
 
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.sbm.java.util.Helper;
 import org.springframework.sbm.mule.actions.javadsl.translators.UnknownStatementTranslatorTemplate;
 import org.springframework.sbm.mule.api.MuleElementInfo;
+import org.springframework.sbm.mule.util.Helper;
 
 import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;

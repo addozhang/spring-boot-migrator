@@ -44,7 +44,7 @@ class PreconditionCheckVerifierTest {
 		PreconditionVerificationResult preconditionVerificationResult = sut.verifyPreconditions(projectRoot, resources);
 
 		assertThat(preconditionVerificationResult.getResults()).hasSize(3);
-		PreconditionCheckResult result1 = preconditionVerificationResult.getResults().get(0);
+		PreconditionCheckResult result1 = preconditionVerificationResult.getChangeset().getAllResults().get(0);
 		assertThat(result1.getState()).isEqualTo(PreconditionCheck.ResultState.FAILED);
 		assertThat(result1.getMessage()).isEqualTo("message 1");
 

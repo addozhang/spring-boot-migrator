@@ -53,7 +53,7 @@ public class CodeCommentTest {
                 here --> */
                 """;
 
-        J.CompilationUnit cu = (J.CompilationUnit) recipeRun.getResults().get(0).getAfter();
+        J.CompilationUnit cu = (J.CompilationUnit) recipeRun.getChangeset().getAllResults().get(0).getAfter();
 
         JavaPrinter<ExecutionContext> javaPrinter = new JavaPrinter<>() {
             @Override

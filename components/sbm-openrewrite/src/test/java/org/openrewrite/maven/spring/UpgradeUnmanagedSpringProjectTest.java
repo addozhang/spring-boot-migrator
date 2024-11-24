@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.Recipe;
 import org.openrewrite.Result;
+import org.openrewrite.SourceFile;
+import org.openrewrite.internal.InMemoryLargeSourceSet;
 import org.openrewrite.maven.MavenParser;
 import org.openrewrite.maven.tree.MavenResolutionResult;
 import org.openrewrite.maven.tree.ResolvedDependency;
@@ -29,6 +31,7 @@ import org.openrewrite.xml.tree.Xml;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -142,11 +145,11 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                 """;
 
-        List<Xml.Document> poms = MavenParser.builder().build().parse(parentPom, modulePom);
+        Stream<SourceFile> poms = MavenParser.builder().build().parse(parentPom, modulePom);
 
         Recipe recipe = new UpgradeUnmanagedSpringProject("3.0.0", "2\\.7\\..*");
 
-        List<Result> results = recipe.run(poms).getResults();
+        List<Result> results = recipe.run(new InMemoryLargeSourceSet(poms.toList()), new InMemoryExecutionContext()).getChangeset().getAllResults();
 
         String version = ((Xml.Document) results.get(0).getAfter())
                 .getMarkers()
@@ -182,7 +185,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -238,7 +241,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();
 
         assertThat(result).hasSize(1);
 
@@ -307,7 +310,7 @@ public class UpgradeUnmanagedSpringProjectTest {
             throw new RuntimeException("Error due UpgradeUnmanagedSpringProject recipe: " + ex.getMessage(), ex);
         });
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -343,7 +346,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();
         assertThat(result).hasSize(0);
     }
 
@@ -356,7 +359,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -406,7 +409,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();
 
         assertThat(result).hasSize(0);
     }
@@ -420,7 +423,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -475,7 +478,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();
 
         assertThat(result).hasSize(0);
     }
@@ -489,7 +492,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -546,7 +549,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();;
 
         assertThat(result).hasSize(1);
 
@@ -619,7 +622,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -678,7 +681,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();;
 
         assertThat(result).hasSize(0);
     }
@@ -692,7 +695,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -742,7 +745,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();;
 
         assertThat(result).hasSize(1);
 
@@ -807,7 +810,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -853,7 +856,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                     </build>
                 </project>
                                 """);
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();;
 
         assertThat(result).hasSize(1);
 
@@ -916,7 +919,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -963,7 +966,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();;
 
         assertThat(result).hasSize(1);
 
@@ -1025,7 +1028,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -1083,7 +1086,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();;
 
         assertThat(result).hasSize(1);
 
@@ -1159,7 +1162,7 @@ public class UpgradeUnmanagedSpringProjectTest {
         });
 
         MavenParser parser = MavenParser.builder().build();
-        List<Xml.Document> documentList = parser.parse("""
+        Stream<SourceFile> documentList = parser.parse("""
                 <?xml version="1.0" encoding="UTF-8"?>
                 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -1205,7 +1208,7 @@ public class UpgradeUnmanagedSpringProjectTest {
                 </project>
                 """);
 
-        List<Result> result = recipe.run(documentList, ctx).getResults();
+        List<Result> result = recipe.run(new InMemoryLargeSourceSet(documentList.toList()), ctx).getChangeset().getAllResults();;
 
         assertThat(result).hasSize(1);
 

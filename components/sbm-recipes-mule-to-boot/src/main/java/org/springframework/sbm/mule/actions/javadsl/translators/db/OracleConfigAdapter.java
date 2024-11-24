@@ -16,7 +16,6 @@
 package org.springframework.sbm.mule.actions.javadsl.translators.db;
 
 import org.mulesoft.schema.mule.db.OracleDatabaseConfigType;
-import org.springframework.sbm.build.api.Dependency;
 import org.springframework.sbm.mule.api.toplevel.configuration.ConfigurationTypeAdapter;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +46,7 @@ public class OracleConfigAdapter extends ConfigurationTypeAdapter<OracleDatabase
         return properties;
     }
 
-    @Override
+    /*@Override
     public List<Dependency> getDependencies() {
 
         return List.of(Dependency.builder()
@@ -55,5 +54,5 @@ public class OracleConfigAdapter extends ConfigurationTypeAdapter<OracleDatabase
                 .artifactId("ojdbc10")
                 .version("19.3.0.0")
                 .build());
-    }
+    }*/
 }

@@ -54,7 +54,7 @@ public class AddAnnotationVisitor extends JavaIsoVisitor<ExecutionContext> {
             JavaTemplate template = getJavaTemplate(p, snippet, imports);
             // FIXME: #7 Moving this line from above getTemplate() fixed BootifyAnnotatedServletsIntegrationTest ?!
             Stream.of(imports).forEach(i -> maybeAddImport(i));
-            cd = cd.withTemplate(template, cd.getCoordinates().addAnnotation((o1, o2) -> 0));
+            cd = template.apply(getCursor(),cd.getCoordinates().addAnnotation((o1, o2) -> 0));
         }
         return cd;
     }
@@ -65,7 +65,7 @@ public class AddAnnotationVisitor extends JavaIsoVisitor<ExecutionContext> {
         if (target.getId().equals(md.getId())) {
             JavaTemplate template = getJavaTemplate(p, snippet, imports);
             Stream.of(imports).forEach(i -> maybeAddImport(i));
-            md = md.withTemplate(template, md.getCoordinates().addAnnotation(Comparator.comparing(J.Annotation::getSimpleName)));
+            md = template.apply(getCursor(), md.getCoordinates().addAnnotation(Comparator.comparing(J.Annotation::getSimpleName)));
         }
         return md;
     }
@@ -76,7 +76,7 @@ public class AddAnnotationVisitor extends JavaIsoVisitor<ExecutionContext> {
         if (target == vd) {
             JavaTemplate template = getJavaTemplate(p, snippet, imports);
             Stream.of(imports).forEach(i -> maybeAddImport(i));
-            vd = vd.withTemplate(template, vd.getCoordinates().addAnnotation(Comparator.comparing(J.Annotation::getSimpleName)));
+            vd = template.apply(getCursor(), vd.getCoordinates().addAnnotation(Comparator.comparing(J.Annotation::getSimpleName)));
         }
         return vd;
     }
@@ -91,9 +91,9 @@ public class AddAnnotationVisitor extends JavaIsoVisitor<ExecutionContext> {
     @NotNull
     private JavaTemplate getJavaTemplate(ExecutionContext p, String snippet, String... imports) {
         // FIXME: #7 javaParser must be recreated to update typesInUse in SourceSet
-        return JavaTemplate.builder(() -> getCursor(), snippet)
+        return JavaTemplate.builder(snippet)
                 .imports(imports)
-                .javaParser(javaParserSupplier)
+                .javaParser((JavaParser.Builder<?, ?>) javaParserSupplier.get())
                 .build();
     }
 

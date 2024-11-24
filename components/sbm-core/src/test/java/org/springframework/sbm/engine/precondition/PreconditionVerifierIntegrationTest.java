@@ -82,8 +82,8 @@ public class PreconditionVerifierIntegrationTest {
         assertThat(sbmApplicationProperties.isGitSupportEnabled()).isTrue();
         assertThat(preconditionVerificationResult.getResults()).hasSize(4);
         assertThat(preconditionVerificationResult.hasError()).isTrue();
-        assertThat(preconditionVerificationResult.getResults().get(0).getState()).isEqualTo(PreconditionCheck.ResultState.FAILED);
-        assertThat(preconditionVerificationResult.getResults().get(0).getMessage()).isEqualTo("SBM requires a Maven build file. Please provide a minimal pom.xml.");
+        assertThat(preconditionVerificationResult.getChangeset().getAllResults().get(0).getState()).isEqualTo(PreconditionCheck.ResultState.FAILED);
+        assertThat(preconditionVerificationResult.getChangeset().getAllResults().get(0).getMessage()).isEqualTo("SBM requires a Maven build file. Please provide a minimal pom.xml.");
         assertThat(preconditionVerificationResult.getResults().get(1).getState()).isEqualTo(PreconditionCheck.ResultState.FAILED);
         assertThat(preconditionVerificationResult.getResults().get(1).getMessage()).isEqualTo("'sbm.gitSupportEnabled' is 'true' but no '.git' dir exists in project dir. Either disable git support or initialize git.");
         assertThat(preconditionVerificationResult.getResults().get(2).getState()).isEqualTo(PreconditionCheck.ResultState.FAILED);
@@ -129,8 +129,8 @@ public class PreconditionVerifierIntegrationTest {
 
         assertThat(sbmApplicationProperties.isGitSupportEnabled()).isTrue();
         assertThat(preconditionVerificationResult.getResults()).hasSize(4);
-        assertThat(preconditionVerificationResult.getResults().get(0).getState()).isEqualTo(PreconditionCheck.ResultState.PASSED);
-        assertThat(preconditionVerificationResult.getResults().get(0).getMessage()).isEqualTo("Found pom.xml.");
+        assertThat(preconditionVerificationResult.getChangeset().getAllResults().get(0).getState()).isEqualTo(PreconditionCheck.ResultState.PASSED);
+        assertThat(preconditionVerificationResult.getChangeset().getAllResults().get(0).getMessage()).isEqualTo("Found pom.xml.");
         assertThat(preconditionVerificationResult.getResults().get(1).getState()).isEqualTo(PreconditionCheck.ResultState.PASSED);
 
         assertThat(preconditionVerificationResult.getResults().get(1).getMessage()).matches("'sbm\\.gitSupportEnabled' is 'true', changes will be committed to branch \\[(master|main)] after each recipe\\.");

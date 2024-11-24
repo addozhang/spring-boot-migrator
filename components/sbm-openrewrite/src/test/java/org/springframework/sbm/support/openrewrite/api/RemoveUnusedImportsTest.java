@@ -15,7 +15,9 @@
  */
 package org.springframework.sbm.support.openrewrite.api;
 
+import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.RecipeRun;
+import org.openrewrite.internal.InMemoryLargeSourceSet;
 import org.springframework.sbm.java.OpenRewriteTestSupport;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.java.RemoveUnusedImports;
@@ -59,9 +61,9 @@ public class RemoveUnusedImportsTest {
         List<J.CompilationUnit> compilationUnits = OpenRewriteTestSupport.createCompilationUnitsFromStrings(List.of("javax.ejb:javax.ejb-api:3.2", "org.springframework.boot:spring-boot-starter-data-jpa:2.4.2"), javaCode);
 
         RemoveUnusedImports sut = new RemoveUnusedImports();
-        RecipeRun run = sut.run(compilationUnits);
+        RecipeRun run = sut.run(new InMemoryLargeSourceSet(compilationUnits), new InMemoryExecutionContext());
 
-        assertThat(run.getResults().get(0).getAfter().printAll()).isEqualTo(expected);
+        assertThat(run.getChangeset().getAllResults().get(0).getAfter().printAll()).isEqualTo(expected);
 
     }
 }

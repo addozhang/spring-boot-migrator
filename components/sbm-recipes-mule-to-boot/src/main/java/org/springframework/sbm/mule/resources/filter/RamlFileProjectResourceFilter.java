@@ -15,21 +15,13 @@
  */
 package org.springframework.sbm.mule.resources.filter;
 
-import org.springframework.sbm.common.api.TextResource.TextSource;
-import org.springframework.sbm.project.resource.ProjectResourceSet;
-import org.springframework.sbm.project.resource.filter.ProjectResourceFinder;
-import org.openrewrite.text.PlainText;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class RamlFileProjectResourceFilter implements ProjectResourceFinder<List<TextSource>> {
-    @Override
+public class RamlFileProjectResourceFilter /*implements ProjectResourceFinder<List<TextSource>>*/ {
+   /* @Override
     public List<TextSource> apply(ProjectResourceSet projectResourceSet) {
         return projectResourceSet.stream()
                 .filter(r -> r.getAbsolutePath().toString().endsWith(".raml"))
                 .filter(r -> PlainText.class.isInstance(r.getSourceFile()))
                 .map(r -> new TextSource(r.getAbsoluteProjectDir(), (PlainText)r.getSourceFile()))
                 .collect(Collectors.toList());
-    }
+    }*/
 }

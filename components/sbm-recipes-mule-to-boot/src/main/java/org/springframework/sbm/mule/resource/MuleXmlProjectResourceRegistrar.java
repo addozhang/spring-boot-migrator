@@ -16,24 +16,12 @@
 package org.springframework.sbm.mule.resource;
 
 import lombok.RequiredArgsConstructor;
-import org.openrewrite.ExecutionContext;
-import org.openrewrite.Parser;
-import org.openrewrite.SourceFile;
-import org.openrewrite.xml.XmlParser;
-import org.openrewrite.xml.tree.Xml;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.sbm.openrewrite.RewriteExecutionContext;
-import org.springframework.sbm.project.resource.ProjectResourceWrapper;
-import org.springframework.sbm.project.resource.RewriteSourceFileHolder;
 import org.springframework.stereotype.Component;
-
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class MuleXmlProjectResourceRegistrar implements ProjectResourceWrapper<MuleXml> {
+public class MuleXmlProjectResourceRegistrar /*implements ProjectResourceWrapper<MuleXml>*/ {
+/*
 
     private final ExecutionContext executionContext;
 
@@ -55,4 +43,5 @@ public class MuleXmlProjectResourceRegistrar implements ProjectResourceWrapper<M
         return sourceFileHolder.getAbsolutePath().toString().endsWith(".xml") &&
                 sourceFileHolder.print().contains("<mule");
     }
+*/
 }

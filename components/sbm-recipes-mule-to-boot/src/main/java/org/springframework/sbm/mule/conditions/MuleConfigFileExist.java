@@ -15,12 +15,8 @@
  */
 package org.springframework.sbm.mule.conditions;
 
-import org.springframework.sbm.mule.resource.MuleXml;
-import org.springframework.sbm.engine.context.ProjectContext;
-import org.springframework.sbm.engine.recipe.Condition;
-
-public class MuleConfigFileExist implements Condition {
-    @Override
+public class MuleConfigFileExist/* implements Condition */{
+/*    @Override
     public String getDescription() {
         return "Has Mulesoft config file.";
     }
@@ -28,5 +24,5 @@ public class MuleConfigFileExist implements Condition {
     @Override
     public boolean evaluate(ProjectContext context) {
         return context.getProjectResources().stream().anyMatch(pr -> MuleXml.class.isAssignableFrom(pr.getClass()));
-    }
+    }*/
 }

@@ -16,6 +16,7 @@
 package org.springframework.sbm.openrewrite.java;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.SourceFile;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaType;
@@ -26,6 +27,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,7 +51,9 @@ public class RetrieveAnnotationTypeTest {
                 .classpath(classpathFiles)
                 .build();
 
-        List<J.Annotation> leadingAnnotations = javaParser.parse(javaSource).get(0).getClasses().get(0).getLeadingAnnotations();
+        Stream<SourceFile> sourceFileStream = javaParser.parse(javaSource);
+        sourceFileStream.findFirst().get()
+        List<J.Annotation> leadingAnnotations = sourceFileStream.toList().get(0).getClasses().get(0).getLeadingAnnotations();
         JavaType.Class type = JavaType.Class.class.cast(leadingAnnotations.get(0).getType());
         assertThat(type.getFullyQualifiedName()).isEqualTo("javax.ejb.Stateless");
     }

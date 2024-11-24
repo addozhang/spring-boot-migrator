@@ -59,7 +59,7 @@ public class UpgradeDependencyVersionTest {
 
         RecipeRun recipeRun = new UpgradeParentVersion("org.springframework.boot", "spring-boot-starter-parent", "2.5.6", null).run(List.of(maven));
 
-        assertThat(recipeRun.getResults().get(0).getAfter().printAll()).isEqualTo(
+        assertThat(recipeRun.getChangeset().getAllResults().get(0).getAfter().printAll()).isEqualTo(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
                 "         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\n" +

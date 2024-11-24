@@ -15,10 +15,7 @@
  */
 package org.springframework.sbm.mule.api.toplevel.configuration;
 
-import org.springframework.sbm.build.api.Dependency;
-
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ConfigurationTypeAdapter<T> {
@@ -39,7 +36,7 @@ public abstract class ConfigurationTypeAdapter<T> {
 
     abstract public List<SimpleEntry<String, String>> configProperties();
 
-    public List<Dependency> getDependencies() {
+    /*public List<Dependency> getDependencies() {
         return new ArrayList<>();
-    }
+    }*/
 }

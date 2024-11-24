@@ -133,6 +133,23 @@ public class OpenRewriteType implements Type {
         // TODO: See if RemoveAnnotationVisitor can be replaced with OpenRewrite's version
         Recipe removeAnnotationRecipe = new GenericOpenRewriteRecipe<>(() -> new RemoveAnnotationVisitor(getClassDeclaration(), fqName))
                 .doNext(new RemoveUnusedImports());
+
+        removeAnnotationRecipe = new Recipe() {
+            @Override
+            public String getDisplayName() {
+                return "";
+            }
+
+            @Override
+            public String getDescription() {
+                return "";
+            }
+
+            @Override
+            public List<Recipe> getRecipeList() {
+                return List.of(new RemoveAnnotation(fqName), new RemoveUnusedImports());
+            }
+        };
         refactoring.refactor(rewriteSourceFileHolder, removeAnnotationRecipe);
     }
 

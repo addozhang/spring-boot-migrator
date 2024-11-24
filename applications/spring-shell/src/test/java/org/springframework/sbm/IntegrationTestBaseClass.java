@@ -15,7 +15,6 @@
  */
 package org.springframework.sbm;
 
-import com.ibm.icu.impl.Assert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.io.FileUtils;

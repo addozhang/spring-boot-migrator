@@ -16,23 +16,39 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>spring-boot-migrator</artifactId>
-        <groupId>org.springframework.sbm</groupId>
-        <version>0.15.2-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+<!--    <parent>-->
+<!--        <artifactId>spring-boot-migrator</artifactId>-->
+<!--        <groupId>org.springframework.sbm</groupId>-->
+<!--        <version>0.15.2-SNAPSHOT</version>-->
+<!--        <relativePath>../../pom.xml</relativePath>-->
+<!--    </parent>-->
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>org.springframework.sbm</groupId>
     <artifactId>sbm-recipes-mule-to-boot</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <spring-boot.version>3.1.1</spring-boot.version>
+        <lombok.version>1.18.30</lombok.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.sbm</groupId>
             <artifactId>sbm-core</artifactId>
             <version>0.15.2-SNAPSHOT</version>
@@ -45,7 +61,13 @@
             <groupId>org.springframework.sbm</groupId>
             <artifactId>sbm-recipes-jee-to-boot</artifactId>
             <version>0.15.2-SNAPSHOT</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.experimental</groupId>
+            <artifactId>sbm-support-rewrite</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
         </dependency>
+
 
         <!-- JAXB model generation -->
         <dependency>
@@ -97,10 +119,21 @@
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1-jre</version>
+        </dependency>
+
+        <!--<dependency>
             <groupId>org.springframework.sbm</groupId>
             <artifactId>recipe-test-support</artifactId>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <!-- JAXB model creation plugin -->
